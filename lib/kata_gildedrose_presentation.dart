@@ -1,57 +1,30 @@
+import 'package:kata_gildedrose_presentation/aged_brie_strategy.dart';
+import 'package:kata_gildedrose_presentation/backstate_strategy.dart';
+import 'package:kata_gildedrose_presentation/default_strategy.dart';
+import 'package:kata_gildedrose_presentation/sulfuras_strategy.dart';
+import 'package:kata_gildedrose_presentation/update_quality_strategy.dart';
+
 class GildedRose {
   List<Item> items;
 
   GildedRose(this.items);
 
   void updateQuality() {
-    for (var item in items) {
+    late UpdateQualityStrategy updateQualityStrategy;
+
+    for (final item in items) {
       if (isSulfuras(item.name)) {
+        updateQualityStrategy = SulfurasStrategy();
       } else if (isAgedBrie(item.name)) {
-        item.quality = increaseQuality(item.quality);
-        item.sellIn = decreaseSellIn(item.sellIn);
-        if (isExpired(item.sellIn)) {
-          item.quality = increaseQuality(item.quality);
-        }
+        updateQualityStrategy = AgedBrieStrategy();
       } else if (isBackstage(item.name)) {
-        item.quality = increaseQuality(item.quality);
-        if (closeToExpire(item.sellIn)) {
-          item.quality = increaseQuality(item.quality);
-        }
-        if (tooCloseToEspire(item.sellIn)) {
-          item.quality = increaseQuality(item.quality);
-        }
-        item.sellIn = decreaseSellIn(item.sellIn);
-        if (isExpired(item.sellIn)) {
-          item.quality = setMinQuality();
-        }
+        updateQualityStrategy = BackstateStrategy();
       } else {
-        item.quality = decreaseQuality(item.quality);
-        item.sellIn = decreaseSellIn(item.sellIn);
-        if (isExpired(item.sellIn)) {
-          item.quality = decreaseQuality(item.quality);
-        }
+        updateQualityStrategy = DefaultStrategy();
       }
+      updateQualityStrategy.update(item);
     }
   }
-
-  bool isExpired(int sellIn) => sellIn < 0;
-  int decreaseSellIn(int sellIn) => sellIn - 1;
-  bool tooCloseToEspire(int sellIn) => sellIn <= 5;
-  bool closeToExpire(int sellIn) => sellIn <= 10;
-
-  int increaseQuality(int quality) {
-    if (!qualityLessLimit(quality)) return quality;
-    return quality + 1;
-  }
-
-  bool qualityLessLimit(int quality) => quality < 50;
-  int decreaseQuality(int quality) {
-    if (!hasQuality(quality)) return quality;
-    return quality - 1;
-  }
-
-  bool hasQuality(int quality) => quality > 0;
-  int setMinQuality() => 0;
 
   bool isSulfuras(String name) => name == "Sulfuras, Hand of Ragnaros";
   bool isBackstage(String name) =>
