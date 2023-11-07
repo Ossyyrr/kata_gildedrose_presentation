@@ -1,4 +1,4 @@
-import 'package:kata_gildedrose_presentation/kata_gildedrose_presentation.dart';
+import 'package:kata_gildedrose_presentation/item.dart';
 
 abstract class UpdateQualityStrategy {
   void update(Item item);

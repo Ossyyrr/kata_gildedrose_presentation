@@ -1,4 +1,4 @@
-import 'package:kata_gildedrose_presentation/kata_gildedrose_presentation.dart';
+import 'package:kata_gildedrose_presentation/item.dart';
 import 'package:kata_gildedrose_presentation/update_quality_strategy.dart';
 
 class BackstateStrategy extends UpdateQualityStrategy {
@@ -16,4 +16,6 @@ class BackstateStrategy extends UpdateQualityStrategy {
       item.quality = setMinQuality();
     }
   }
+
+  static const String name = "Backstage passes to a TAFKAL80ETC concert";
 }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:kata_gildedrose_presentation/item.dart';
 import 'package:kata_gildedrose_presentation/kata_gildedrose_presentation.dart';
 import 'package:test/test.dart';
 

@@ -1,4 +1,4 @@
-import 'package:kata_gildedrose_presentation/kata_gildedrose_presentation.dart';
+import 'package:kata_gildedrose_presentation/item.dart';
 import 'package:kata_gildedrose_presentation/update_quality_strategy.dart';
 
 class AgedBrieStrategy extends UpdateQualityStrategy {
@@ -10,4 +10,6 @@ class AgedBrieStrategy extends UpdateQualityStrategy {
       item.quality = increaseQuality(item.quality);
     }
   }
+
+  static const String name = "Aged Brie";
 }
