@@ -4,57 +4,72 @@ class GildedRose {
   GildedRose(this.items);
 
   void updateQuality() {
-    for (int i = 0; i < items.length; i++) {
-      if (items[i].name != "Aged Brie" &&
-          items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
-        if (items[i].quality > 0) {
-          if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-            items[i].quality = items[i].quality - 1;
+    for (var item in items) {
+      if (!isAgedBrie(item.name) && !isBackstage(item.name)) {
+        if (hasQuality(item.quality)) {
+          if (!isSulfuras(item.name)) {
+            item.quality = decreaseQuality(item.quality);
           }
         }
       } else {
-        if (items[i].quality < 50) {
-          items[i].quality = items[i].quality + 1;
+        if (qualityLessLimit(item.quality)) {
+          item.quality = increaseQuality(item.quality);
 
-          if (items[i].name == "Backstage passes to a TAFKAL80ETC concert") {
-            if (items[i].sellIn < 11) {
-              if (items[i].quality < 50) {
-                items[i].quality = items[i].quality + 1;
+          if (isBackstage(item.name)) {
+            if (closeToExpire(item.sellIn)) {
+              if (qualityLessLimit(item.quality)) {
+                item.quality = increaseQuality(item.quality);
               }
             }
 
-            if (items[i].sellIn < 6) {
-              if (items[i].quality < 50) {
-                items[i].quality = items[i].quality + 1;
+            if (tooCloseToEspire(item.sellIn)) {
+              if (qualityLessLimit(item.quality)) {
+                item.quality = increaseQuality(item.quality);
               }
             }
           }
         }
       }
 
-      if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-        items[i].sellIn = items[i].sellIn - 1;
+      if (!isSulfuras(item.name)) {
+        item.sellIn = decreaseSellIn(item.sellIn);
       }
 
-      if (items[i].sellIn < 0) {
-        if (items[i].name != "Aged Brie") {
-          if (items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
-            if (items[i].quality > 0) {
-              if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                items[i].quality = items[i].quality - 1;
+      if (isExpired(item.sellIn)) {
+        if (!isAgedBrie(item.name)) {
+          if (!isBackstage(item.name)) {
+            if (hasQuality(item.quality)) {
+              if (!isSulfuras(item.name)) {
+                item.quality = decreaseQuality(item.quality);
               }
             }
           } else {
-            items[i].quality = items[i].quality - items[i].quality;
+            item.quality = setMinQuality();
           }
         } else {
-          if (items[i].quality < 50) {
-            items[i].quality = items[i].quality + 1;
+          if (qualityLessLimit(item.quality)) {
+            item.quality = increaseQuality(item.quality);
           }
         }
       }
     }
   }
+
+  bool isExpired(int sellIn) => sellIn < 0;
+  int decreaseSellIn(int sellIn) => sellIn - 1;
+  bool tooCloseToEspire(int sellIn) => sellIn <= 5;
+  bool closeToExpire(int sellIn) => sellIn <= 10;
+
+  int increaseQuality(int quality) => quality + 1;
+  bool qualityLessLimit(int quality) => quality < 50;
+  int decreaseQuality(int quality) => quality - 1;
+  bool hasQuality(int quality) => quality > 0;
+  int setMinQuality() => 0;
+
+  bool isSulfuras(String name) => name == "Sulfuras, Hand of Ragnaros";
+  bool isBackstage(String name) =>
+      name == "Backstage passes to a TAFKAL80ETC concert";
+  bool isAgedBrie(String name) => name == "Aged Brie";
 }
 
 class Item {
