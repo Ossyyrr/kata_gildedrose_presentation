@@ -5,51 +5,30 @@ class GildedRose {
 
   void updateQuality() {
     for (var item in items) {
-      if (!isAgedBrie(item.name) && !isBackstage(item.name)) {
-        if (hasQuality(item.quality)) {
-          if (!isSulfuras(item.name)) {
-            item.quality = decreaseQuality(item.quality);
-          }
+      if (isSulfuras(item.name)) {
+      } else if (isAgedBrie(item.name)) {
+        item.quality = increaseQuality(item.quality);
+        item.sellIn = decreaseSellIn(item.sellIn);
+        if (isExpired(item.sellIn)) {
+          item.quality = increaseQuality(item.quality);
+        }
+      } else if (isBackstage(item.name)) {
+        item.quality = increaseQuality(item.quality);
+        if (closeToExpire(item.sellIn)) {
+          item.quality = increaseQuality(item.quality);
+        }
+        if (tooCloseToEspire(item.sellIn)) {
+          item.quality = increaseQuality(item.quality);
+        }
+        item.sellIn = decreaseSellIn(item.sellIn);
+        if (isExpired(item.sellIn)) {
+          item.quality = setMinQuality();
         }
       } else {
-        if (qualityLessLimit(item.quality)) {
-          item.quality = increaseQuality(item.quality);
-
-          if (isBackstage(item.name)) {
-            if (closeToExpire(item.sellIn)) {
-              if (qualityLessLimit(item.quality)) {
-                item.quality = increaseQuality(item.quality);
-              }
-            }
-
-            if (tooCloseToEspire(item.sellIn)) {
-              if (qualityLessLimit(item.quality)) {
-                item.quality = increaseQuality(item.quality);
-              }
-            }
-          }
-        }
-      }
-
-      if (!isSulfuras(item.name)) {
+        item.quality = decreaseQuality(item.quality);
         item.sellIn = decreaseSellIn(item.sellIn);
-      }
-
-      if (isExpired(item.sellIn)) {
-        if (!isAgedBrie(item.name)) {
-          if (!isBackstage(item.name)) {
-            if (hasQuality(item.quality)) {
-              if (!isSulfuras(item.name)) {
-                item.quality = decreaseQuality(item.quality);
-              }
-            }
-          } else {
-            item.quality = setMinQuality();
-          }
-        } else {
-          if (qualityLessLimit(item.quality)) {
-            item.quality = increaseQuality(item.quality);
-          }
+        if (isExpired(item.sellIn)) {
+          item.quality = decreaseQuality(item.quality);
         }
       }
     }
@@ -60,9 +39,17 @@ class GildedRose {
   bool tooCloseToEspire(int sellIn) => sellIn <= 5;
   bool closeToExpire(int sellIn) => sellIn <= 10;
 
-  int increaseQuality(int quality) => quality + 1;
+  int increaseQuality(int quality) {
+    if (!qualityLessLimit(quality)) return quality;
+    return quality + 1;
+  }
+
   bool qualityLessLimit(int quality) => quality < 50;
-  int decreaseQuality(int quality) => quality - 1;
+  int decreaseQuality(int quality) {
+    if (!hasQuality(quality)) return quality;
+    return quality - 1;
+  }
+
   bool hasQuality(int quality) => quality > 0;
   int setMinQuality() => 0;
 
