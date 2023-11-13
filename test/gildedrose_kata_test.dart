@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:kata_gildedrose_presentation/item.dart';
 import 'package:kata_gildedrose_presentation/kata_gildedrose_presentation.dart';
 import 'package:test/test.dart';
 
@@ -148,15 +149,15 @@ void main() {
     expect(item.quality, 0);
   });
 
-  // test('should decrease double Quality for conjured objects', () {
-  //   var randomSellIn = 5;
-  //   var randomQuality = 44;
+  test('should decrease double Quality for conjured objects', () {
+    var randomSellIn = 5;
+    var randomQuality = 44;
 
-  //   Item item = Item('Conjured', randomSellIn, randomQuality);
+    Item item = Item('Conjured', randomSellIn, randomQuality);
 
-  //   GildedRose([item]).updateQuality();
+    GildedRose([item]).updateQuality();
 
-  //   expect(item.sellIn, randomSellIn - 1);
-  //   expect(item.quality, 42);
-  // });
+    expect(item.sellIn, randomSellIn - 1);
+    expect(item.quality, 42);
+  });
 }
