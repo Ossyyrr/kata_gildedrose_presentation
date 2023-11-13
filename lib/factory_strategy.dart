@@ -1,19 +1,17 @@
-import 'package:kata_gildedrose_presentation/cojured_strategy.dart';
-import 'package:kata_gildedrose_presentation/default_strategy.dart';
-import 'package:kata_gildedrose_presentation/update_aged_brie.dart';
-import 'package:kata_gildedrose_presentation/update_backstage_strategy.dart';
-import 'package:kata_gildedrose_presentation/update_item_strategy.dart';
-import 'package:kata_gildedrose_presentation/update_sulfuras_strategy.dart';
+import 'package:kata_gildedrose_presentation/item.dart';
 
-class Factorystrategy {
-  UpdateItemStrategy getStrategy(String name) {
-    Map<String, UpdateItemStrategy> strategies = {
-      "Sulfuras, Hand of Ragnaros": UpdateSulfurasStrategy(),
-      "Backstage passes to a TAFKAL80ETC concert": UpdateBackstageStrategy(),
-      "Aged Brie": UpdateAgedBrie(),
-      'Conjured': ConjuredStrategy(),
+class ItemFactory {
+  Item getItemByName(Item item) {
+    Map<String, Item> strategies = {
+      "Sulfuras, Hand of Ragnaros":
+          SulfurasItem(item.name, item.sellIn, item.quality),
+      "Backstage passes to a TAFKAL80ETC concert":
+          BackstageItem(item.name, item.sellIn, item.quality),
+      "Aged Brie": AgedBrieItem(item.name, item.sellIn, item.quality),
+      'Conjured': ConjuredItem(item.name, item.sellIn, item.quality),
     };
 
-    return strategies[name] ?? DefaultStrategy();
+    return strategies[item.name] ??
+        DefaultItem(item.name, item.sellIn, item.quality);
   }
 }

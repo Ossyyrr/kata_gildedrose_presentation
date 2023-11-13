@@ -1,6 +1,5 @@
 import 'package:kata_gildedrose_presentation/factory_strategy.dart';
 import 'package:kata_gildedrose_presentation/item.dart';
-import 'package:kata_gildedrose_presentation/update_item_strategy.dart';
 
 class GildedRose {
   List<Item> items;
@@ -9,9 +8,10 @@ class GildedRose {
 
   void updateQuality() {
     for (var item in items) {
-      UpdateItemStrategy updateItemStrategy =
-          Factorystrategy().getStrategy(item.name);
-      updateItemStrategy.update(item);
+      Item newItem = ItemFactory().getItemByName(item);
+      newItem.update();
+      item.quality = newItem.quality;
+      item.sellIn = newItem.sellIn;
     }
   }
 }
